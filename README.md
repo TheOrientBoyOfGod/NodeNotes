@@ -1,0 +1,2 @@
+# NodeNotes
+MyNodeNotes---------------------------TheOrientBoyOfGod
