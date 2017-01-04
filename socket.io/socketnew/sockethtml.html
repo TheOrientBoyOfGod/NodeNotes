@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>socke聊天室</title>
+	<style type="text/css">
+		h1{font-family: Arial,Helvetica;font-weight: bold;font-size: 14pt;color: #006bb3;background-color: #f0f0f0;border-radius: 5px;border: 1px solid blue;padding: 5px;margin: 0px 0px 18px;}
+		div[id^='divContainter']{
+			border:0px;margin: 10px 0px 0px;padding: 3px;background-color: #f0f0f0;border-radius: 5px;
+		}
+		#divleft{width: 85%;background-color: #f0f0f0;float: left;}
+		#divright{width: 15%;background-color: white;float: right;font-weight: bold;font-size: 12px;}
+		#divchat{overflow: hidden;border:0;margin: 10px 0px 0px;padding: 3px;border-radius: 5px;position: relative;height: 300px;overflow: auto;font-size: 12px;}
+		table#tbdlg{font-family: verdana,helvetica,sans-self;font-weight: normal;font-size: 12px;background-color: #f0f0f0;}
+		#trdlg,#tddlg{font-size: 12px;background-color: #f0f0f0;}
+		textarea{border: 1px solid #444;background-color: white;width: 100%;}
+		input[type='button']{border: 3px solid #808080;border-radius: 10px;margin: 2px;color: white;background-color: #81a0ba;width: 100px;padding: 3px}
+		input[type='button']:hover{background-color: #006bb5;}
+		input[type='button']:active{background-color: #006bb5;font-weight: bold;}
+		input[type='button']:focus{background-color: #006bb5;font-weight: bold;}
+
+		.name{text-align: right;color: red;font-weight: bold;font-size: 20px;}
+		.name1{text-align: left;color: green;font-weight: bold;font-size: 20px;}
+		.name_content{text-align:left;color: blue;font-weight: normal;font-size: 18px;}
+	</style>
+</head>
+<body onload="window_onload()" onunload="window_onunload()" style="width: 900px;border:1px solid #ccc">
+	<h1>socket.io聊天室x</h1>
+	<div id="divContainter1">
+		<table id="tbDlg" border='0' cellpadding='3' cellspacing='0' width='100%'>
+			<tr id="trDLg">
+				<td id="tdDlg" width='5'>
+					userName:&nbsp;
+					<input id="tbxusername" type="text" value="游客" size='20'>
+					<input id="btnlogin" type="button" value="LOGIN" onclick="btnlogin_onclick()">
+					<input id="btnlogout" type="button" value="LOGOUT" onclick="btnlogout_onclick()">
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="divleft">
+		<div id="divchat"></div>
+		<div id="divcontainter3">
+			<table id="tbdlg" border='0' cellpadding='3' cellspacing='0' width='100%'>
+				<tr id="trDLg">
+					<td id="tdDlg" valign="top" nowrap>对话</td>
+					<td id="tdDlg" valign="top">
+						<textarea id="tbxmsg" cols='150' rows="5" style="width: 100%"></textarea>
+					</td>
+					<td id="tdDlg" width='5'>
+						<input id="btnsend" type="button" value="SEND" onclick="btnsend_onclick()">
+					</td>
+				</tr>
+			</table>
+			<div class="more">
+				<input type="file" accept="image/*" id="file">
+			</div>
+		</div>
+	</div>
+	<div id="divright"></div>
+	<div style="height:100px;clear:both">;
+
+		<img src="" id="img">
+	</div>
+	<script type="text/javascript" src='/socket.io/socket.io.js'></script>
+	<script type="text/javascript">
+		var username,socket,tbxusername,tbxmsg,divchat,divright;
+		function window_onload(){
+			btnlogin=document.getElementById('btnlogin');
+			divchat=document.getElementById('divchat');
+			tbxusername=document.getElementById('tbxusername');
+			tbxmsg=document.getElementById('tbxmsg');
+			divright=document.getElementById('divright');
+			tbxusername.focus();
+			tbxusername.select();
+		};
+		function Addmsg(msg){
+			divchat.innerHTML+=msg+'<br>';
+			if (divchat.scrollHeight>divchat.clientHeight) {
+				divchat.scrollTop=divchat.scrollHeight-divchat.clientHeight;
+			};
+		};
+		function btnlogin_onclick(){
+			if (tbxusername.value.trim()=='') {
+				tbxusername.value=prompt('please your name',"").trim();
+				return false;
+			};
+			username=tbxusername.value;
+			if (socket) {
+				socket.destroy();
+				// or return false
+			};
+			socket=io.connect();//----------------------------这里每一次的点击都会产生一个scoket对象实例导致触发事件多次
+			// 解决方法：1.阻止实例化;2.销毁实例在建实例
+			socket.on('connect',function (){
+				Addmsg('与聊天室服务器已经建立连接');
+				socket.on('login',function(name){
+					Addmsg('欢迎进入聊天室：'+name);
+					console.log(socket)
+					btnlogin.disabled=true;
+				});
+				socket.on('sendclients',function (names){
+					var str='';
+					names.forEach(function (item,index,names){
+						str+=item+'<br>';
+					});
+					divright.innerHTML='用户列表<br/>'+str;
+				});
+				socket.on('chat',function (data){
+					Addmsg('<div class="name1">'+data.user+' : '+'<span class="name_content">'+data.msg+'&nbsp;&nbsp;&nbsp;</span></div>');
+				});
+				socket.on('mychat',function (data){
+					Addmsg('<div class="name">'+data.user+' : '+'<span class="name_content">'+data.msg+'&nbsp;&nbsp;&nbsp;</span></div>');
+				});
+				socket.on('disconnect',function(){
+					Addmsg('Server disconnect Client');
+					divright.innerHTML='User List';
+					socket.destroy();
+
+				});
+				socket.on('logout',function (name){
+					Addmsg('用户   '+name+'  leave the Room');
+				});
+				socket.on('duplicate',function (){
+					alert('This has been used');
+				});
+			});
+			socket.on('error',function (error){
+				Addmsg('Disconnection error');
+				socket.disconnect();
+				socket.removeAllListeners('connect');
+				socket.destroy();
+
+			});
+			socket.emit('login',username);
+			
+			
+		};
+		function btnsend_onclick(Datas){
+			var msg=Datas||tbxmsg.value;
+			if (msg.length>0) {{
+				socket.emit('chat',{user:username,msg:msg});
+				tbxmsg.value='';
+			}};
+		};
+		function btnlogout_onclick(){
+			btnlogin.disabled=false;
+			socket.emit('logout',username);
+			socket.disconnect();
+			socket.removeAllListeners('connect');
+			
+			
+		};
+		function window_onunload(){
+			document.cookie='name=uu;expries='+(new Date()).setDate(28)
+			socket.emit('logout',username);
+			socket.disconnect();
+			socket.destroy();
+
+		};
+		function window_onbeforeunload(){
+			document.cookie='ss=sss;expries='+(new Date()).setDate(28)
+			socket.emit('logout',username);
+			socket.disconnect();
+			socket.destroy();
+
+		};
+		document.onbeforeunload=window_onbeforeunload();
+		document.onkeydown=function(event){
+			var event=event||window.event;
+			if (event.keyCode==13) {
+				event.preventDefault();
+				btnsend_onclick();
+			};
+		}
+	</script>
+	<script type="text/javascript">
+		var bgimage=document.getElementById('file');
+		bgimage.onchange=function(){
+			var url=this.files[0];
+			var reader=new FileReader();
+			reader.readAsDataURL(url);
+			reader.onload=function (event){
+				var img='<img src='+ this.result+'>';
+				btnsend_onclick(img);
+			}
+			// imgurl=window.URL.createObjectURL(url)||window.webkitURL.createObjectURL(url);
+			// document.querySelector('#divchat').style.backgroundImage='url('+imgurl+')';
+			// console.log(imgurl);
+			// console.log(url);
+			// document.querySelector('img').src=imgurl
+			// var img='<img src='+ imgurl+'>';
+			// btnsend_onclick(img);
+		
+
+		}
+		
+	</script>
+</body>
+</html>
