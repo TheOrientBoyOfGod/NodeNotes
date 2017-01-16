@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="file" id='files-list'>
+	<div id="output"></div>
+	<progress id='progress'></progress>
+	<details>
+		<summary>section</summary>
+		<p>details and summary <details><summary>section</summary><P>DSAS</P></details></p>
+	</details>
+
+</body>
+</html>
+<script>
+	eval("var msg = 'hello world'; ");
+alert(msg);
+	var filesList = document.getElementById("files-list");
+		filesList.addEventListener("change", function(event){
+			var event=event||window.event;
+			console.log(event.files)
+			var info = "",
+			output = document.getElementById("output"),
+			progress = document.getElementById("progress"),
+			files = event.value,
+			type = "default",
+			reader = new FileReader();
+			if (/image/.test(files[0].type)){
+				reader.readAsDataURL(files[0]);
+				type = "image";
+			} else {
+				reader.readAsText(files[0]);
+				type = "text";
+			}
+			reader.onerror = function(){
+				output.innerHTML = "Could not read file, error code is " +
+				reader.error.code;
+			};
+			reader.onprogress = function(event){
+				if (event.lengthComputable){
+					progress.innerHTML = event.loaded + "/" + event.total;
+				}
+			};
+			reader.onload = function(){
+				var html = "";
+				switch(type){
+					case "image":
+						html = "<img src=\"" + reader.result + "\">";
+					break;
+					case "text":
+						html = reader.result;
+					break;
+				}
+					output.innerHTML = html;
+			};
+		},false)
+</script>

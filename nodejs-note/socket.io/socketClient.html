@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>socketIO</title>
+	<script type="text/javascript" src='/socket.io/socket.io.js'></script>
+</head>
+<body>
+	<form action="">
+		user:<input type="text" id="ipt">
+		<input type="submit" value="submit" onclick="add()">
+	</form>
+	<output id="result"></output>
+	<script type="text/javascript">
+		var socket=io.connect();
+		socket.on('login',function (names){
+			var str='';
+			names.forEach(function (item,index,array){
+				str+=`user:${item},logined <br/>`
+			});
+			document.getElementById('result').innerHTML=str;
+		});
+		function add(){
+			socket.emit('login',document.getElementById('ipt').value)
+		}
+	</script>
+</body>
+</html>

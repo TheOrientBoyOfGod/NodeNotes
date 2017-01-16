@@ -1,0 +1,169 @@
+TAGS:
+	attributes：
+		A:{
+			coords=(0,0,100,100);
+			shape=default/rect/circle/poly;
+			download=filename
+			href=url
+			media=media features;
+			name=name;
+			rel=relationship;
+			target=_blank/_selg/_parent/_top/framename;
+			type=mime_type;
+			<a href="mailto:someone@example.com">e-mail
+		}
+
+	ABBR:abbreviation used for example:WTO;
+	ADDRESS:address information used;
+	B:STRONG;
+	I:EM;VAR;
+	BIG;BR;
+	CAPTION;COL;
+	DL/DT/DD;
+	DEL;INS;
+	DIALOG:open;
+	HR;
+
+		AREA:{
+			alt=text;
+			shape=default/rect/circle/poly;
+			coords=(coordinates);
+			href=url;
+			media=media feature;
+			rel=relationship;
+			target='A' TAG of target;
+			type=mimi-type;
+
+		}
+
+		AUDIO:{
+			controls;
+			autoplay;
+			loop;
+			muted;
+			preload:auto/metadata/none;
+			src=url;
+		}
+
+		BASE:{
+			herf=url;
+			target=targetAll;
+
+		}
+		BASEFONT:{isdrop
+			color=color;
+			face=font_family;
+			size=number;
+		}
+		
+		BDO:{
+			dir=rtl/ltr
+		}
+		
+		BLOCKQUOTE:{
+			cite=url;
+		}
+		BUTTON:{
+			autofocus;
+			disabled;
+			form=form_IDs;
+			formaction=url;cover the action of form;
+			formmethod=get/post..;
+			formtarget=target;
+			name=name;
+			type=button/reset/submit;
+			value=text;
+		}
+		DETAIL:{
+			open;
+		}
+		DIALOG:{
+			open;
+		}
+		EMBED:{
+			height=px;
+			width=px;
+			src=url;
+			type=mime;
+		}
+		FORM:{
+			accept=mime;
+			action=url;
+			autofocus=on/off;
+			enctype=code;
+			method=put/get/post/..
+			name=name;
+			target=target;
+			novalidate;
+		}
+		IMG:{
+			alt=text;
+			crossorigin=anonymous/use-credentials;
+			height;width;border/hspace/vspace;
+			ismap;
+			src=url;
+			usemap=#mapName;
+		}
+		INPUT:{
+			accept=mime;
+			alt=text;
+			autofocus=on/off;
+			checked;disabled;
+			form=form_ID;
+			formaction=url;
+			formenctype=code;
+			formmethod=get/post;
+			formnolidate;
+			formtarget=target;
+			height/width/;
+			list=datalist_ID;
+			max=num;
+			maxlength=num;
+			min=num;
+			multiple;
+			placeholder=text;
+			readonly;
+			required;
+			name=name;
+			pattern=regexp;
+			size=num;
+			src=url:image;
+			step=num;
+			type=button/text/submit/checkbox/radio/color/date/datetime/email/file/hidden/image/month/number/password/range/reset/search/tel/time/url/week/
+		}
+		KEYGEN:{
+			keytype=rsa/dsa/ec/
+		}
+		LABEL:{
+			for=element_id;
+			form=form_ID;
+		}
+		VIDEO:{
+			autoplay;
+			controls;
+			height/width/src
+			loop;
+			muted;
+			poster:url;
+			preload:auto/metadata/none;
+			volume
+		}
+Semantic Tags:
+	{
+		ARTICLE;
+		ASIDE;
+		CANVAS;
+		CITE;
+		CODE;
+		KBD;
+		DATALIST;
+		DETAIL;
+		FIGURE;FIGCAPTION;
+		FOOTER;
+		HEADER;
+		HGROUP;
+		MAP;
+		
+
+	};
+
