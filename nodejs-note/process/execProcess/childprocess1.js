@@ -1,0 +1,1 @@
+process.stdout.write('子进程的工作目录：'+__dirname);
