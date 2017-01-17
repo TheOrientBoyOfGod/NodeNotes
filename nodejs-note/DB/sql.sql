@@ -31,5 +31,6 @@ alter table:在大多数情况下，表结构的更改一般都使用alter table
 	alter table yankui rename [to] newyankui; 
 }
 DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete/select
-	
+	insert into yankui (ids,name) values(value,value);
+	***理解：
 }
