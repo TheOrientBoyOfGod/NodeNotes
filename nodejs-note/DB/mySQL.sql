@@ -8,7 +8,8 @@ command
 	mysql -u root  -p;
 	 	exit;
 	mysql -u root  -p :{
-		create dbname;
+		// create dbname;
+		CREATE DATABASE dbname
 		drop dbname;
 	CREATE TABLE table_name (column_name column_type);
 	}
