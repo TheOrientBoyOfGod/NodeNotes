@@ -23,7 +23,7 @@ command
 	SELECT * FROM tablename ORDER BY field ASC|DESC
 	SELECT * FROM tablename GROUP BY field [WITH ROLLUP];
 	SELECT coalesce(a,b,c);使用 coalesce 来设置一个可以取代 NUll 的名称;
-	SELECT a.feild FROM tablename1 a INNER JOIN tablename2 b ON a.feild=b.feild;
+	SELECT a.feild  FROM tablename1 a INNER JOIN tablename2 b ON a.feild=b.feild;
 		INNER JOIN/LEFT JOIN/RIGHT JOIN;
 	REGEXP:{
 		WHERE name REGEXP 'regstring';
