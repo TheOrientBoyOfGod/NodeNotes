@@ -1,3 +1,6 @@
+data:{
+	http://book.phpchina.com/
+}
 mysql -u root  -p;-----connect sqlserver;
 create database dbname;
 	show databases;
@@ -57,7 +60,7 @@ DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete
 		select ids,name from yankui [where conditions];
 		select distinct fieldname from yankui [where conditions];查询不重复的字符串; 
 	};
-	排序和限制:{order by;limit numoffset,numlength
+	排序和限制:{order by;limit [numoffset],numlength
 		select * from yankui [where conditions] [order by fieldname,fieldname2 [desc|asc],...] [limit 1,3];
 		####[desc|asc]是[降序|升序]
 	};
@@ -86,7 +89,7 @@ DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete
 		+----+------+--------+----------+
 
 	-------------------------------------------------------------------
-	select * from yankui yk,yankui2,yk2 where yk.name=yk2.name;
+	select * from yankui yk,yankui2 yk2 where yk.name=yk2.name;
 					yankui      	*               yankui2
 	+----+------+--------+------------+----+------+--------+----------+
 	| id | name | dream  | date       | id | name | dream  | mygoal   |
@@ -97,6 +100,7 @@ DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete
 	|  7 | yk   | world  | 2017-01-01 |  1 | yk   | world  | world    |以多为主，不够补上；
 	+----+------+--------+------------+----+------+--------+----------+
 	select yk.name,yk2.mygoal from yankui yk,yankui2,yk2 where yk.name=yk2.name;
+		yankui.*:yankui表的所以字段;
 		 yankui - yankui2
 		+------+----------+
 		| name | mygoal   |
@@ -106,7 +110,86 @@ DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete
 		| yks  | xingixng |
 		| yk   | world    |
 		+------+----------+
+		select * from yankui left join yankui2 on yankui.name=yankui2.name;
+			left join:产生表A的完全集，而B表中匹配的则有值，没有匹配的则以null值取代。left join<<-yankui<->yankui2 ->>get right join;
+			right join:产生表B的完全集，而A表中匹配的则有值，没有匹配的则以null值取代。
+			inner join:产生表AB的交集。
 
-
+	};
+	子查询:{在另外一个select语句的结果查询
+		查询的关键字主要包括in、not in、=、!=、exists、not exists;
 	}
+
+	
+}
+mysql查询的五种子句:{
+	 where(条件查询)、having（筛选）、group by（分组）、order by（排序）、limit（限制结果数）;
+	 where{
+	 	where feildname >= value ;>=,>,<,<=,=,!= (<>);
+	 	where feildname between v1 and v2;
+	 	where feildname in (v1,v2,v3...);where feildname in (select fieldname from table);
+	 	where feildname=(v1 or v2); not(!) or(||) and(&&);
+	 	like 查询:{=
+	 		%:任意多个字符串;
+	 		__:任意单个字符串;
+	 		where feildname like value%;
+	 		where feildname like value__;
+	 	}
+	 };
+	 group by :{统计归类;
+	   select fun(feildname||表达式||num)||feildname||表达式结果 [as 结果别名] from table group by feildname1;
+	   		max(feildname||表达式);
+	   		min(feildname||表达式); ->>>>表达式:feildname*feildname2......
+	   		sum(feildname||表达式);
+	   		count(feildname||表达式||num||*);
+	   		avg(score);平均数;
+	 };
+	 select fieldname<value from table;------列出的是bool值：0,1;
+	 having 与 where 的异同点:{
+	 	where 针对表中的列发挥作用，"查询数据":'不可以使用别名'
+        having 对查询结果中的列发挥作用，"筛选数据":'可以使用别名';
+	 };
+	 order by:{
+	 	order by fieldname [desc||asc];
+	 	order by rand();随机;
+	 };
+	 limit{
+	 	limit [offset],length;
+	 }
+	"良好的理解模型："
+        1、where后面的表达式，把表达式放在每一行中，看是否成立
+        2、字段(列)，理解为变量，可以进行运算（算术运算和逻辑运算）  
+        3、 取出结果可以理解成一张临时表
+};
+==================================================================================================
+==================================================================================================
+from型子查询:{
+	"把内层的查询结果供外层再次查询"
+	select name,avg(id) from yankui2 where name in(
+		select name from (--------返回的就是表或数组值;
+			select name,count(*) as cou from yankui group by name having cou > 2
+		)as t
+	)group by name;
+};
+exists型子查询:{
+	"把外层查询结果拿到内层，看内层的查询是否成立"
+	select name,id from yankui where exists (select * from yankui2 where yankui2.name=yankui.name);
+			where 为真才输出前面的表记录；
+};
+union的用法:{
+	"把两次或多次的查询结果合并起来,自动会去重复，如果不想去重复则要加all来声明"
+	(select * from yankui union all select * from yankui2) as othernames;----get select table result;
+	select * from yankui union all select * from yankui2-----输出的表结构要一样；
+}
+=======================================================================================================
+DCL语句------------------------------------------------------------------------------------------------
+=======================================================================================================
+DCL语句:{主要是DBA用来管理系统中的"对象权限"时所使用;
+	授权:grant select,insert,... on databasename.* to 'username'@'localhost' identified by 'password';
+		 grant(授权)==>  操作  ==>  数据库的所有表  ==> 用户名===@=>主机  =====>密码;
+		 exit;----退出root用户;
+		 mysql -uusername -p;-----登录username用户;
+	也可以在root下mysql数据库下user表来进行操作；
+		revoke select on databasename.* to 'username'@'localhost';
+			收回select权限;
 }
