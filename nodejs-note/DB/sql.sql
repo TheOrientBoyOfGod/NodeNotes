@@ -48,6 +48,8 @@ alter table:在大多数情况下，表结构的更改一般都使用alter table
 +----+------+---------+------------+
 DML语句:{DML操作是指对数据库中表记录的操作:insert/update/delete/select;all [where conditions]
 	insert into yankui (ids,name) values(value,value)，....;一条或多条表记录;
+		insert into yankui values(value,value)，....;一条或多条表记录;
+		insert into yankui set feilaname='value',feildname2='value'，....;一条表记录;
 	***理解：表结构和表记录;
 	update yankui set ids=100,name=yk,... where ids=1;
 		update yankui yk,tabname2 tb2 set yk.name=yks,tb2.name=yk.name,....where conditions;
@@ -161,6 +163,16 @@ mysql查询的五种子句:{
         2、字段(列)，理解为变量，可以进行运算（算术运算和逻辑运算）  
         3、 取出结果可以理解成一张临时表
 };
+
+functions:{
+	max(feildname||表达式);
+	min(feildname||表达式); ->>>>表达式:feildname*feildname2......
+	sum(feildname||表达式);
+	count(feildname||表达式||num||*);
+	avg(score);平均数;
+	length(feildname);
+	concat(feildname,....);组合;
+}
 ==================================================================================================
 ==================================================================================================
 from型子查询:{
@@ -192,4 +204,61 @@ DCL语句:{主要是DBA用来管理系统中的"对象权限"时所使用;
 	也可以在root下mysql数据库下user表来进行操作；
 		revoke select on databasename.* to 'username'@'localhost';
 			收回select权限;
+
+	帮助询问:{
+		"? contents"命令来显示所有可供查询的的分类------list
+		"? listone":listone is ? contents 的列表中的一个
+		"? listtwo":listone is ? listone 的列表中的一个
+		.......
+		? 命令：显示该命令的用法和描述;
+	}
+}
+-------------------------------------------------------------------------------------
+======================================================================================
+MySQL中中的的运运算算符:{
+	select 表达式；-----得出结果;
+		+-*/%
+		3%2====mod(3,2);
+		=,<>,!=,<=,<,>=,>,
+		<=>全等于
+		between one and two;
+		in (集合);
+		like;
+		is null;
+		is not null;
+		regexp或rlike;
+};
+
+常用用函函数:{
+	 concat(s1,s2...)
+	 insert(str,x,length,targetstr);---string,4,3,yankui--->stryankui
+	 lower(str)/upper(str);
+	 left('string',3);--->str
+	 right('string',2);--->ng;
+	 lpad(str,totallength,'str');lpad('string',10,'s');-->ssssstring
+	 rpad(str,totallength,'str');lpad('string',10,'s');-->stringssss
+	 ltrim(str)/rtrim(str);
+	 repeat(str,x);return x 次的str结果；
+	 replace('string','str','ing');---inging
+	 strcmp(a,b)---num(-1,0,1)比较ascll
+	 trim(str);
+	 ----------------------------------------------
+	 abs(x);
+	 ceil(x);
+	 floor(x);
+	 mod(x,y);
+	 rand();
+	 round(x);
+	 truncate(x,y);
+	 --------------------------------------------
+	 new()..............
+	 --------------------------------------------
+	 流程函数:{
+	 	-- if (valueistrue,trueReturnThis,falseReturnOther);
+	 	-- ifnull(value1,value2);value1 is not null get value1,other get value2;
+	 	if(value,t f);如果value是真，返回t;否则返回f
+	 	ifnull(value1,value2)如果value1不为空返回value1，否则返回value2;这里的value 是否为null类型;value:null||NULL;no ''||'null'
+	 	case when [value1] then[result1]...else[default]end;如果value1是真，返回result1，否则返回default
+	 	case [expr] when [value1] then[result1]...else[default]end;
+	 }
 }
