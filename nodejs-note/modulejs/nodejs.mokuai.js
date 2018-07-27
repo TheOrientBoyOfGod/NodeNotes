@@ -15,3 +15,11 @@ module.exports = hello;//返回require的对象名字objectname
 // 	console.warn(this);
 // 	console.info('成功合作');
 // }
+
+console.log(module.filename)
+module.id = 'buffers';
+console.log(module.id);
+console.log(module.filename);
+console.log(module.loaded);
+console.log(module.parent);
+console.log(module.children);
